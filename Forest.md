@@ -808,3 +808,5 @@ To see how to exploit a permission, *right-click* the edge and select *Help*
 
 ![image](https://github.com/user-attachments/assets/e302043c-13f0-48f0-9922-dc85459b6f06)
 
+## Add New User to *Exchange Windows Permissions* and *Local Administrators*
+
