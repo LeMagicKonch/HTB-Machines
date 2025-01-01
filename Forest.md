@@ -796,3 +796,6 @@ INFO: Done in 00M 04S
 
 #### Start Bloodhound and Import the JSONs from the above command
 
+Using the Built In Search *Shaortest Paths to High Value Targets* we get the below map
+
+![image](https://github.com/user-attachments/assets/9dd5f142-a10b-46f8-abd9-b4f58fc0afa6)
