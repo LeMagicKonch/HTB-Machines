@@ -799,3 +799,12 @@ INFO: Done in 00M 04S
 Using the Built In Search *Shaortest Paths to High Value Targets* we get the below map
 
 ![image](https://github.com/user-attachments/assets/9dd5f142-a10b-46f8-abd9-b4f58fc0afa6)
+
+From the map we see that *svc-alfresco* is a member of the *Account Operators* Group which enables us to create a user and put them into the local Administrators group and the *Exchange Windows Permissions* Group
+
+The *Exchange Windows Permissions* groups has *WriteDACL* permissions over HTB.local meaning a user in this group can perform a DCSync Attack!!!
+
+To see how to exploit a permission, *right-click* the edge and select *Help*
+
+![image](https://github.com/user-attachments/assets/e302043c-13f0-48f0-9922-dc85459b6f06)
+
