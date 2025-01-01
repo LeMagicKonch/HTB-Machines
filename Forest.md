@@ -364,11 +364,52 @@ Nmap done: 1 IP address (1 host up) scanned in 269.70 seconds
 
 ## **LDAP**
 
+### Nmap Scripts For Public Information
+
+```bash
+┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
+└─$ nmap -n -sV --script "ldap* and not brute" 10.129.200.84                    
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2025-01-01 08:14 EST
+Nmap scan report for 10.129.200.84
+Host is up (0.061s latency).
+Not shown: 989 closed tcp ports (conn-refused)
+PORT     STATE SERVICE      VERSION
+53/tcp   open  domain       Simple DNS Plus
+88/tcp   open  kerberos-sec Microsoft Windows Kerberos (server time: 2025-01-01 13:21:36Z)
+135/tcp  open  msrpc        Microsoft Windows RPC
+139/tcp  open  netbios-ssn  Microsoft Windows netbios-ssn
+389/tcp  open  ldap         Microsoft Windows Active Directory LDAP (Domain: htb.local, Site: Default-First-Site-Name)
+| ldap-rootdse: 
+| LDAP Results
+|   <ROOT>
+|       currentTime: 20250101132138.0Z
+|       subschemaSubentry: CN=Aggregate,CN=Schema,CN=Configuration,DC=htb,DC=local
+|       dsServiceName: CN=NTDS Settings,CN=FOREST,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=htb,DC=local
+|       namingContexts: DC=htb,DC=local
+|       namingContexts: CN=Configuration,DC=htb,DC=local
+|       namingContexts: CN=Schema,CN=Configuration,DC=htb,DC=local
+|       namingContexts: DC=DomainDnsZones,DC=htb,DC=local
+|       namingContexts: DC=ForestDnsZones,DC=htb,DC=local
+|       defaultNamingContext: DC=htb,DC=local
+|       schemaNamingContext: CN=Schema,CN=Configuration,DC=htb,DC=local
+|       configurationNamingContext: CN=Configuration,DC=htb,DC=local
+
+SNIP
+```
+NOTE: This is a lot of information to sift so we will try to narrow down, like finding users
+
+
+
 ### Checking Anonymous Bind
 
 #### LDAPSEARCH
 
-NOTE: Ensure you add a record in */etc/hosts* correlating the target IP to the domain *htb.local*
+```bash
+┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
+└─$ ldapsearch -x -H ldap://10.129.200.84 -D '' -w '' -b "DC=htb,DC=local"
+```
+
+NOTE: Ensure you add a record in */etc/hosts* correlating the target IP to the domain *htb.local* before doing the below command
 
 ```bash
 ┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
@@ -485,3 +526,106 @@ result: 0 Success
 # numEntries: 1
 
 ```
+## **Getting User List**
+
+### windapsearch.py
+
+```bash
+─[us-dedivip-1]─[10.10.14.63]─[kali@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ python windapsearch.py --dc-ip 10.129.200.84 -u '' -p '' -U
+[+] No username provided. Will try anonymous bind.
+[+] Using Domain Controller at: 10.129.200.84
+[+] Getting defaultNamingContext from Root DSE
+[+]	Found: DC=htb,DC=local
+[+] Attempting bind
+[+]	...success! Binded as: 
+[+]	 None
+
+[+] Enumerating all AD users
+[+]	Found 29 users: 
+
+cn: Guest
+
+cn: DefaultAccount
+
+cn: Exchange Online-ApplicationAccount
+userPrincipalName: Exchange_Online-ApplicationAccount@htb.local
+
+cn: SystemMailbox{1f05a927-89c0-4725-adca-4527114196a1}
+userPrincipalName: SystemMailbox{1f05a927-89c0-4725-adca-4527114196a1}@htb.local
+
+cn: SystemMailbox{bb558c35-97f1-4cb9-8ff7-d53741dc928c}
+userPrincipalName: SystemMailbox{bb558c35-97f1-4cb9-8ff7-d53741dc928c}@htb.local
+
+cn: SystemMailbox{e0dc1c29-89c3-4034-b678-e6c29d823ed9}
+userPrincipalName: SystemMailbox{e0dc1c29-89c3-4034-b678-e6c29d823ed9}@htb.local
+
+cn: DiscoverySearchMailbox {D919BA05-46A6-415f-80AD-7E09334BB852}
+userPrincipalName: DiscoverySearchMailbox {D919BA05-46A6-415f-80AD-7E09334BB852}@htb.local
+
+cn: Migration.8f3e7716-2011-43e4-96b1-aba62d229136
+userPrincipalName: Migration.8f3e7716-2011-43e4-96b1-aba62d229136@htb.local
+
+cn: FederatedEmail.4c1f4d8b-8179-4148-93bf-00a95fa1e042
+userPrincipalName: FederatedEmail.4c1f4d8b-8179-4148-93bf-00a95fa1e042@htb.local
+
+cn: SystemMailbox{D0E409A0-AF9B-4720-92FE-AAC869B0D201}
+userPrincipalName: SystemMailbox{D0E409A0-AF9B-4720-92FE-AAC869B0D201}@htb.local
+
+cn: SystemMailbox{2CE34405-31BE-455D-89D7-A7C7DA7A0DAA}
+userPrincipalName: SystemMailbox{2CE34405-31BE-455D-89D7-A7C7DA7A0DAA}@htb.local
+
+cn: SystemMailbox{8cc370d3-822a-4ab8-a926-bb94bd0641a9}
+userPrincipalName: SystemMailbox{8cc370d3-822a-4ab8-a926-bb94bd0641a9}@htb.local
+
+cn: HealthMailboxc3d7722415ad41a5b19e3e00e165edbe
+userPrincipalName: HealthMailboxc3d7722415ad41a5b19e3e00e165edbe@htb.local
+
+cn: HealthMailboxfc9daad117b84fe08b081886bd8a5a50
+userPrincipalName: HealthMailboxfc9daad117b84fe08b081886bd8a5a50@htb.local
+
+cn: HealthMailboxc0a90c97d4994429b15003d6a518f3f5
+userPrincipalName: HealthMailboxc0a90c97d4994429b15003d6a518f3f5@htb.local
+
+cn: HealthMailbox670628ec4dd64321acfdf6e67db3a2d8
+userPrincipalName: HealthMailbox670628ec4dd64321acfdf6e67db3a2d8@htb.local
+
+cn: HealthMailbox968e74dd3edb414cb4018376e7dd95ba
+userPrincipalName: HealthMailbox968e74dd3edb414cb4018376e7dd95ba@htb.local
+
+cn: HealthMailbox6ded67848a234577a1756e072081d01f
+userPrincipalName: HealthMailbox6ded67848a234577a1756e072081d01f@htb.local
+
+cn: HealthMailbox83d6781be36b4bbf8893b03c2ee379ab
+userPrincipalName: HealthMailbox83d6781be36b4bbf8893b03c2ee379ab@htb.local
+
+cn: HealthMailboxfd87238e536e49e08738480d300e3772
+userPrincipalName: HealthMailboxfd87238e536e49e08738480d300e3772@htb.local
+
+cn: HealthMailboxb01ac647a64648d2a5fa21df27058a24
+userPrincipalName: HealthMailboxb01ac647a64648d2a5fa21df27058a24@htb.local
+
+cn: HealthMailbox7108a4e350f84b32a7a90d8e718f78cf
+userPrincipalName: HealthMailbox7108a4e350f84b32a7a90d8e718f78cf@htb.local
+
+cn: HealthMailbox0659cc188f4c4f9f978f6c2142c4181e
+userPrincipalName: HealthMailbox0659cc188f4c4f9f978f6c2142c4181e@htb.local
+
+cn: Sebastien Caron
+userPrincipalName: sebastien@htb.local
+
+cn: Lucinda Berger
+userPrincipalName: lucinda@htb.local
+
+cn: Andy Hislip
+userPrincipalName: andy@htb.local
+
+cn: Mark Brandt
+userPrincipalName: mark@htb.local
+
+cn: Santi Rodriguez
+userPrincipalName: santi@htb.local
+
+[*] Bye!
+```
+
