@@ -3,6 +3,8 @@
 ## Table Of Contents:
 <!--ts-->
   * [Enumeration](#enumeration)
+    * [NMAP Scan](#nmap-scan)
+    * [SMB](#smb)
     * [LDAP](#ldap)
       * [ldapsearch](#ldapsearch)
       * [Enum4Linux](#enum4linux)
@@ -90,5 +92,24 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 92.22 seconds
 
 ```
+
+## **SMB**
+
+### Attempting Anonymous Login
+
+```bash
+┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
+└─$ smbclient --no-pass -L //10.129.200.84
+Anonymous login successful
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+Reconnecting with SMB1 for workgroup listing.
+do_connect: Connection to 10.129.200.84 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)
+Unable to connect with SMB1 -- no workgroup available
+
+```
+
+The anonymous login appears to work; however, not seeing any shares...
 
 ## **LDAP**
