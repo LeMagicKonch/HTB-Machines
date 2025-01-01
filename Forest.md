@@ -101,6 +101,26 @@ From the available ports this machine is looking like a Domain Controller.
 
 ```bash
 ┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
+└─$ smbmap -H 10.129.200.84               
+
+    ________  ___      ___  _______   ___      ___       __         _______
+   /"       )|"  \    /"  ||   _  "\ |"  \    /"  |     /""\       |   __ "\
+  (:   \___/  \   \  //   |(. |_)  :) \   \  //   |    /    \      (. |__) :)
+   \___  \    /\  \/.    ||:     \/   /\   \/.    |   /' /\  \     |:  ____/
+    __/  \   |: \.        |(|  _  \  |: \.        |  //  __'  \    (|  /
+   /" \   :) |.  \    /:  ||: |_)  :)|.  \    /:  | /   /  \   \  /|__/ \
+  (_______/  |___|\__/|___|(_______/ |___|\__/|___|(___/    \___)(_______)
+-----------------------------------------------------------------------------
+SMBMap - Samba Share Enumerator v1.10.4 | Shawn Evans - ShawnDEvans@gmail.com<mailto:ShawnDEvans@gmail.com>
+                     https://github.com/ShawnDEvans/smbmap
+
+[*] Detected 1 hosts serving SMB                                                                                                  
+[*] Established 1 SMB connections(s) and 0 authenticated session(s)                                                          
+[*] Closed 1 connections
+```
+
+```bash
+┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
 └─$ smbclient --no-pass -L //10.129.200.84
 Anonymous login successful
 
