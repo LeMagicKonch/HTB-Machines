@@ -93,6 +93,8 @@ Nmap done: 1 IP address (1 host up) scanned in 92.22 seconds
 
 ```
 
+From the available ports this machine is looking like a Domain Controller.
+
 ## **SMB**
 
 ### Attempting Anonymous Login
