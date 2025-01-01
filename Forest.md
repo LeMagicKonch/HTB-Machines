@@ -129,7 +129,12 @@ Anonymous login successful
 Reconnecting with SMB1 for workgroup listing.
 do_connect: Connection to 10.129.200.84 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)
 Unable to connect with SMB1 -- no workgroup available
+```
 
+```bash
+┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
+└─$ crackmapexec smb 10.129.200.84 --shares
+SMB         10.129.200.84   445    FOREST           [*] Windows Server 2016 Standard 14393 x64 (name:FOREST) (domain:htb.local) (signing:True) (SMBv1:True)
 ```
 
 The anonymous login appears to work; however, not seeing any shares...
