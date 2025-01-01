@@ -368,6 +368,8 @@ Nmap done: 1 IP address (1 host up) scanned in 269.70 seconds
 
 #### LDAPSEARCH
 
+NOTE: Ensure you add a record in */etc/hosts* correlating the target IP to the domain *htb.local*
+
 ```bash
 ┌──(kali㉿kali)-[~/Desktop/HTB/openvpn]
 └─$ ldapsearch -H ldap://htb.local:389/ -x -s base -b 'dc=htb,dc=local' 
