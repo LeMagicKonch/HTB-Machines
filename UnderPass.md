@@ -328,4 +328,15 @@ Found on the documentation for *daloradius* that the default credentials are *Ad
 
 ![image](https://github.com/user-attachments/assets/7dcfa15f-c77d-4401-a0a3-82c60be36858)
 
+### **Credentials Discovered**
+
+In the User Management pane we see a *svcMosh* with a password that looks encrypted.
+
+![image](https://github.com/user-attachments/assets/d8b9c6aa-b3f1-4b2e-aa66-4d31296572f4)
+
+As this looks like weak encryption I threw it into *crackstation* and got the password *underwaterfriends*
+
+![image](https://github.com/user-attachments/assets/88610120-e13f-4409-a9cf-06917d800e26)
+
+
 
