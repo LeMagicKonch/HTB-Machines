@@ -293,3 +293,14 @@ This made me want to rerun the directory enumeration but this time using the giv
 
 ![image](https://github.com/user-attachments/assets/c34af58f-1c8b-4742-adda-c83e93d9f6d8)
 
+Unfortunately, none of the default passwords worked here. Time to check the login page for the operators.
+
+### **Operator Login Page Found**
+
+![image](https://github.com/user-attachments/assets/7407f242-dbee-493e-ac9b-54d40cc280d2)
+
+Found on the documentation for *daloradius* that the default credentials are *Administrator : radius* which worked on this login portal...
+
+![image](https://github.com/user-attachments/assets/7dcfa15f-c77d-4401-a0a3-82c60be36858)
+
+
