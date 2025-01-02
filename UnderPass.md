@@ -13,6 +13,7 @@
       * [Discovered Credentials](#discovered-credentials)
       * [SSH to Target](#ssh-to-target)
   * [Privilege Escalation](#privilege-escalation)
+    * [Exploiting Mosh](#Spawn-Root-Shell-Using-Mosh)
   * [Alternate Methods](#alternate-methods)
 
 # **Port & Service Enumeration**
