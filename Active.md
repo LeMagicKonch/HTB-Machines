@@ -9,6 +9,7 @@
     * [Cracking Encrypted Password](#cracking-encrypted-password)
   * [Privilege Escalation](#privilege-escalation)
     * [Remote BloodHound](#remote-bloodhound)
+    * [Kerberoast Attack](#kerberoast-attack)
 <!--te-->
 
 # **Port & Service Enumeration**
@@ -324,7 +325,13 @@ INFO: Starting computer enumeration with 10 workers
 INFO: Querying computer: DC.active.htb
 INFO: Done in 00M 02S
 ```
-
 Now Upload the created JSON files into BloodHound!
 
+## **Kerberoast Attck**
+
+Looking at the BloodHound Results, the *SVC_TGS* account does NOT have any direct paths to gain more privs.
+
+However, running the built-in query to find Kerberoastable Accounts reveals that the *Administrator* is susceptible to Kerberoasting!
+
+![image](https://github.com/user-attachments/assets/4b038cc8-2507-4438-9938-e9b772027b39)
 
