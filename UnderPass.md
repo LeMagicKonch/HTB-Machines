@@ -88,4 +88,35 @@ Nmap done: 1 IP address (1 host up) scanned in 7.12 seconds
 
 ## **HTTP Enumeration**
 
+Add *underpass.htb* to */etc/hosts*
 
+Landing page
+
+![image](https://github.com/user-attachments/assets/36ddff4b-2f73-41b1-819d-a0e3c256a8fa)
+
+### **Directory Enumeration**
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~]
+└──╼ [★]$ gobuster dir -u http://underpass.htb/ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt 
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://underpass.htb/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.6
+[+] Timeout:                 10s
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+Progress: 87664 / 87665 (100.00%)
+===============================================================
+Finished
+===============================================================
+```
+
+### **Vhost Enumeration**
