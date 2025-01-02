@@ -4,6 +4,8 @@
 <!--ts-->
   * [Port & Service Enumeration](#port-&-service-enumeration)
     * [HTTP Enumeration](#http-enumeration)
+      * [Directory Enumeration](#directory-enumeration)
+      * [Vhost Enumeration](#vhost-enumeration)
   * [Initial Access](#intial-access)
   * [Privilege Escalation](#privilege-escalation)
   * [Alternate Methods](#alternate-methods)
