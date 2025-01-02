@@ -259,8 +259,7 @@ After looking through the extracted files we find a username *SVC_TGS* and an en
 
 Doing a simple Google search on *cpassword* we find that it is a known mal-practice of storing passwords in GPOs.
 
-Additionally, we can use this tools to crack the password
-[LINK](https://github.com/t0thkr1s/gpp-decrypt)
+Additionally, we can use this tools to crack the password: [gpp-decrypt tool](https://github.com/t0thkr1s/gpp-decrypt)
 
 ```bash
 ┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~/Desktop/gpp-decrypt]
