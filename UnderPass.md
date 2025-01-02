@@ -98,6 +98,8 @@ Landing page
 
 ### **Directory Enumeration**
 
+#### Using *gobuster*
+
 ```bash
 ┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~]
 └──╼ [★]$ gobuster dir -u http://underpass.htb/ -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-small.txt 
@@ -119,6 +121,34 @@ Progress: 87664 / 87665 (100.00%)
 ===============================================================
 Finished
 ===============================================================
+```
+
+#### Using *dirb*
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~]
+└──╼ [★]$ dirb http://underpass.htb
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Thu Jan  2 14:04:56 2025
+URL_BASE: http://underpass.htb/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://underpass.htb/ ----
++ http://underpass.htb/index.html (CODE:200|SIZE:10671)                                                                                                                                     
++ http://underpass.htb/server-status (CODE:403|SIZE:278)                                                                                                                                    
+                                                                                                                                                                                            
+-----------------
+END_TIME: Thu Jan  2 14:05:36 2025
+DOWNLOADED: 4612 - FOUND: 2
 ```
 
 ### **Vhost Enumeration**
