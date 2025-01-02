@@ -286,7 +286,32 @@ After some googling i noticed this file directory that gets created : */var/www/
 This made me want to rerun the directory enumeration but this time using the given url of *http://underpass.htb/daloradius/*
 
 ```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~]
+└──╼ [★]$ dirb http://underpass.htb/daloradius/
 
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Thu Jan  2 14:23:58 2025
+URL_BASE: http://underpass.htb/daloradius/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://underpass.htb/daloradius/ ----
+==> DIRECTORY: http://underpass.htb/daloradius/app/                                                                                                                                         
++ http://underpass.htb/daloradius/ChangeLog (CODE:200|SIZE:24703)                                                                                                                           
+==> DIRECTORY: http://underpass.htb/daloradius/contrib/                                                                                                                                     
+==> DIRECTORY: http://underpass.htb/daloradius/doc/                                                                                                                                         
+==> DIRECTORY: http://underpass.htb/daloradius/library/                                                                                                                                     
++ http://underpass.htb/daloradius/LICENSE (CODE:200|SIZE:18011)                                                                                                                             
+==> DIRECTORY: http://underpass.htb/daloradius/setup/
+
+<SNIP>
 ```
 
 ### **User Login Page Found**
