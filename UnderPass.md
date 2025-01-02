@@ -9,6 +9,9 @@
     * [Misc Enumeration](#misc-enumeration)
   * [Initial Access](#intial-access)
     * [DaloRadius Server Enumeration](#daloradius-server-enumeration)
+      * [Default Credentials](#default-credentials)
+      * [Discovered Credentials](#discovered-credentials)
+      * [SSH to Target](#ssh-to-target)
   * [Privilege Escalation](#privilege-escalation)
   * [Alternate Methods](#alternate-methods)
 
@@ -322,13 +325,15 @@ Unfortunately, none of the default passwords worked here. Time to check the logi
 
 ### **Operator Login Page Found**
 
+#### Default Credentials
+
 ![image](https://github.com/user-attachments/assets/7407f242-dbee-493e-ac9b-54d40cc280d2)
 
 Found on the documentation for *daloradius* that the default credentials are *Administrator : radius* which worked on this login portal...
 
 ![image](https://github.com/user-attachments/assets/7dcfa15f-c77d-4401-a0a3-82c60be36858)
 
-### **Credentials Discovered**
+### **Discovered Credentials**
 
 In the User Management pane we see a *svcMosh* with a password that looks encrypted.
 
@@ -338,5 +343,16 @@ As this looks like weak encryption I threw it into *crackstation* and got the pa
 
 ![image](https://github.com/user-attachments/assets/88610120-e13f-4409-a9cf-06917d800e26)
 
+### **SSH To Target**
 
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~/Desktop]
+└──╼ [★]$ ssh svcMosh@10.129.163.87
+svcMosh@10.129.163.87's password: 
+Welcome to Ubuntu 22.04.5 LTS (GNU/Linux 5.15.0-126-generic x86_64)
+
+Last login: Thu Dec 12 15:45:42 2024 from 10.10.14.65
+svcMosh@underpass:~$ 
+
+```
 
