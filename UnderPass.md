@@ -120,3 +120,62 @@ Finished
 ```
 
 ### **Vhost Enumeration**
+
+#### Using *ffuf*  
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~]
+└──╼ [★]$ ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://underpass.htb -H "HOST: FUZZ.underpass.htb" -fs 10671
+
+        /'___\  /'___\           /'___\       
+       /\ \__/ /\ \__/  __  __  /\ \__/       
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      
+         \ \_\   \ \_\  \ \____/  \ \_\       
+          \/_/    \/_/   \/___/    \/_/       
+
+       v2.1.0-dev
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://underpass.htb
+ :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
+ :: Header           : Host: FUZZ.underpass.htb
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500
+ :: Filter           : Response size: 10671
+________________________________________________
+
+:: Progress: [114441/114441] :: Job [1/1] :: 1428 req/sec :: Duration: [0:01:12] :: Errors: 0 ::
+```
+
+#### Using *gobuster*
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-xmn3euvuef]─[~]
+└──╼ [★]$ gobuster vhost -u http://underpass.htb/ -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt  -p pattern --exclude-length 301 -t 10
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:              http://underpass.htb/
+[+] Method:           GET
+[+] Threads:          10
+[+] Wordlist:         /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
+[+] Patterns:         pattern (1 entries)
+[+] User Agent:       gobuster/3.6
+[+] Timeout:          10s
+[+] Append Domain:    false
+[+] Exclude Length:   301
+===============================================================
+Starting gobuster in VHOST enumeration mode
+===============================================================
+Progress: 228882 / 114442 (200.00%)
+===============================================================
+Finished
+===============================================================
+
+```
