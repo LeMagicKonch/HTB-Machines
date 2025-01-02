@@ -5,6 +5,8 @@
   * [Port & Service Enumeration](#port-&-service-enumeration)
     * [LDAP](#LDAP)
     * [SMB](#SMB)
+  * [Initial Access](#intial-access)
+    * [Cracking Encrypted Password](#cracking-encrypted-password)
 <!--te-->
 
 # **Port & Service Enumeration**
@@ -244,6 +246,8 @@ smb: \> prompt OFF
 smb: \> mget *
 ```
 
+# **Initial Access**
+
 After looking through the extracted files we find a username *SVC_TGS* and an encrypted password in the *groups.xml* file!
 
 ```xml
@@ -251,13 +255,12 @@ After looking through the extracted files we find a username *SVC_TGS* and an en
 <Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}"><User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="active.htb\SVC_TGS" image="2" changed="2018-07-18 20:46:06" uid="{EF57DA28-5F69-4530-A59E-AAB58578219D}"><Properties action="U" newName="" fullName="" description="" cpassword="<REDACTED>" changeLogon="0" noChange="1" neverExpires="1" acctDisabled="0" userName="active.htb\SVC_TGS"/></User>
 </Groups>
 ```
+## **Cracking Encrypted Password**
 
 Doing a simple Google search on *cpassword* we find that it is a known mal-practice of storing passwords in GPOs.
 
 Additionally, we can use this tools to crack the password
 [LINK](https://github.com/t0thkr1s/gpp-decrypt)
-
-### **Cracking the *cpassword* **
 
 ```bash
 ┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~/Desktop/gpp-decrypt]
