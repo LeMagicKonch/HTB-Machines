@@ -4,16 +4,13 @@
 <!--ts-->
   * [Port & Service Enumeration](#port-&-service-enumeration)
     * [HTTP Enumeration](#http-enumeration)
-      * [Directory Enumeration](#directory-enumeration)
+      * [Robots.txt](#checking-robots.txt)
       * [Vhost Enumeration](#vhost-enumeration)
-    * [Misc Enumeration](#misc-enumeration)
+      * [Directory Enumeration](#directory-enumeration)
   * [Initial Access](#intial-access)
     * [Git-Dumper](#git-dumper)
-      * [Default Credentials](#default-credentials)
-      * [Discovered Credentials](#discovered-credentials)
-      * [SSH to Target](#ssh-to-target)
+    * [Searching For Keywords](#searching-for-keywords)
   * [Privilege Escalation](#privilege-escalation)
-    * [Exploiting Mosh](#Spawn-Root-Shell-Using-Mosh)
   * [Alternate Methods](#alternate-methods)
 
 # **Port & Service Enumeration**
@@ -81,6 +78,14 @@ dev                     [Status: 200, Size: 2538, Words: 670, Lines: 116, Durati
 ```
 
 ### **Directory Enumeration**
+
+#### **Checking *robots.txt*
+
+When going to *http://linkvortex.htb/robots.txt* we see the target is running *Ghost CMS*
+
+Additionally, going to *http://linkvortex.htb/ghost* gets to a login page.
+
+![image](https://github.com/user-attachments/assets/ec4700e4-949b-45d8-b418-dc09a61fa876)
 
 #### **Importance of Trying Different Tools and Wordlists**
 
@@ -201,4 +206,28 @@ Target: http://dev.linkvortex.htb/
 [06:03:23] 403 -  199B  - /server-status
 
 Task Completed
+```
+
+# **Initial Access**
+
+## **Git-Dumper.py**
+
+After looking through the directory at *http://dev.linkvortex.htb/.git/* in the browser I started thinking that a lot was missing.
+
+I googled how to enumerate *.git* directories for GitHub Projects and came across a tool called *git-dumper.py*
+
+This lets us pull all the files and store them locally to disect.
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~/Desktop/git-dumper/website]
+└──╼ [★]$ python git_dumper.py http://dev.linkvortex.htb/.git/ ./website/
+```
+
+## **Searching For KeyWords**
+
+There are a lot of files here. I tried to find some keywords that might expose credentials
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~/Desktop/git-dumper/website]
+└──╼ [★]$ find . -type f -exec grep -H "password" {} \;
 ```
