@@ -10,6 +10,7 @@
   * [Initial Access](#intial-access)
     * [Git-Dumper](#git-dumper)
     * [Searching For Keywords](#searching-for-keywords)
+    * [Ghost Login](#ghost-login)
   * [Privilege Escalation](#privilege-escalation)
   * [Alternate Methods](#alternate-methods)
 
@@ -231,3 +232,20 @@ There are a lot of files here. I tried to find some keywords that might expose c
 ┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~/Desktop/git-dumper/website]
 └──╼ [★]$ find . -type f -exec grep -H "password" {} \;
 ```
+
+From the above command we find hardcoded credentials
+
+```bash
+./ghost/core/test/regression/api/admin/authentication.test.js:            const password = 'OctopiFociPilfer45';
+./ghost/core/test/regression/api/admin/authentication.test.js:            const password = 'thisissupersafe';
+```
+
+## **Ghost Login**
+
+We can try to use the found credentials on the login page we found earlier or try SSH as well.
+
+Looks like the credentials *admin@linkvortex.htb:OctopiFociPilfer45* worked on the Ghost Login Page!!!
+
+![image](https://github.com/user-attachments/assets/833da857-3a20-4239-bf06-d7138969be96)
+
+
