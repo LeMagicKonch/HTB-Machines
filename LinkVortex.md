@@ -79,7 +79,7 @@ dev                     [Status: 200, Size: 2538, Words: 670, Lines: 116, Durati
 
 ### **Directory Enumeration**
 
-#### **Checking *robots.txt*
+#### **Checking *robots.txt* **
 
 When going to *http://linkvortex.htb/robots.txt* we see the target is running *Ghost CMS*
 
