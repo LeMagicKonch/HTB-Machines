@@ -8,7 +8,7 @@
       * [Vhost Enumeration](#vhost-enumeration)
     * [Misc Enumeration](#misc-enumeration)
   * [Initial Access](#intial-access)
-    * [DaloRadius Server Enumeration](#daloradius-server-enumeration)
+    * [Git-Dumper](#git-dumper)
       * [Default Credentials](#default-credentials)
       * [Discovered Credentials](#discovered-credentials)
       * [SSH to Target](#ssh-to-target)
