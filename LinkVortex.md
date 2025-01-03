@@ -48,6 +48,8 @@ Nmap done: 1 IP address (1 host up) scanned in 7.51 seconds
 
 ## **HTTP Enumeration**
 
+### **Vhost Enumeration**
+
 ```bash
 ┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~]
 └──╼ [★]$ ffuf -u http://linkvortex.htb -H "Host: FUZZ.linkvortex.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -fs 230
@@ -78,7 +80,125 @@ dev                     [Status: 200, Size: 2538, Words: 670, Lines: 116, Durati
 :: Progress: [19966/19966] :: Job [1/1] :: 4761 req/sec :: Duration: [0:00:04] :: Errors: 0 ::
 ```
 
-### **Vhost Enumeration**
-
-
 ### **Directory Enumeration**
+
+#### **Importance of Trying Different Tools and Wordlists**
+
+This box shows the importance of trying different wordlists and tools to enumerate directories as you might miss something!
+
+Here is an example of how the same tool, *feroxbuster* had two different results using different wordlists:
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~]
+└──╼ [★]$ feroxbuster -u http://dev.linkvortex.htb/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt 
+                                                                                                                                                                                              
+ ___  ___  __   __     __      __         __   ___
+|__  |__  |__) |__) | /  `    /  \ \_/ | |  \ |__
+|    |___ |  \ |  \ | \__,    \__/ / \ | |__/ |___
+by Ben "epi" Risher 🤓                 ver: 2.11.0
+───────────────────────────┬──────────────────────
+ 🎯  Target Url            │ http://dev.linkvortex.htb/
+ 🚀  Threads               │ 50
+ 📖  Wordlist              │ /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+ 👌  Status Codes          │ All Status Codes!
+ 💥  Timeout (secs)        │ 7
+ 🦡  User-Agent            │ feroxbuster/2.11.0
+ 🔎  Extract Links         │ true
+ 🏁  HTTP methods          │ [GET]
+ 🔃  Recursion Depth       │ 4
+───────────────────────────┴──────────────────────
+ 🏁  Press [ENTER] to use the Scan Management Menu™
+──────────────────────────────────────────────────
+404      GET        7l       23w      196c Auto-filtering found 404-like response and created new filter; toggle off with --dont-filter
+403      GET        7l       20w      199c Auto-filtering found 404-like response and created new filter; toggle off with --dont-filter
+200      GET      115l      255w     2538c http://dev.linkvortex.htb/
+[####################] - 53s   220546/220546  0s      found:1       errors:158    
+[####################] - 52s   220546/220546  4242/s  http://dev.linkvortex.htb/  
+```
+
+Now using the *common.txt* wordlist:
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~]
+└──╼ [★]$ feroxbuster -u http://dev.linkvortex.htb/ -w /usr/share/wordlists/dirb/common.txt 
+                                                                                                                                                                                              
+ ___  ___  __   __     __      __         __   ___
+|__  |__  |__) |__) | /  `    /  \ \_/ | |  \ |__
+|    |___ |  \ |  \ | \__,    \__/ / \ | |__/ |___
+by Ben "epi" Risher 🤓                 ver: 2.11.0
+───────────────────────────┬──────────────────────
+ 🎯  Target Url            │ http://dev.linkvortex.htb/
+ 🚀  Threads               │ 50
+ 📖  Wordlist              │ /usr/share/wordlists/dirb/common.txt
+ 👌  Status Codes          │ All Status Codes!
+ 💥  Timeout (secs)        │ 7
+ 🦡  User-Agent            │ feroxbuster/2.11.0
+ 🔎  Extract Links         │ true
+ 🏁  HTTP methods          │ [GET]
+ 🔃  Recursion Depth       │ 4
+───────────────────────────┴──────────────────────
+ 🏁  Press [ENTER] to use the Scan Management Menu™
+──────────────────────────────────────────────────
+404      GET        7l       23w      196c Auto-filtering found 404-like response and created new filter; toggle off with --dont-filter
+403      GET        7l       20w      199c Auto-filtering found 404-like response and created new filter; toggle off with --dont-filter
+200      GET      115l      255w     2538c http://dev.linkvortex.htb/
+200      GET        1l        1w       41c http://dev.linkvortex.htb/.git/HEAD
+200      GET      115l      255w     2538c http://dev.linkvortex.htb/index.html
+[####################] - 2s      9228/9228    0s      found:3       errors:0      
+[####################] - 1s      4614/4614    3272/s  http://dev.linkvortex.htb/ 
+[####################] - 1s      4614/4614    5322/s  http://dev.linkvortex.htb/cgi-bin/  
+```
+
+Now lets try the tool *dirsearch* which is a go-to tool for me personally:
+
+```bash
+┌─[us-dedivip-1]─[10.10.14.63]─[lemagickonch@htb-sgld3m8c2v]─[~]
+└──╼ [★]$ dirsearch -u http://dev.linkvortex.htb
+
+  _|. _ _  _  _  _ _|_    v0.4.3
+ (_||| _) (/_(_|| (_| )
+
+Extensions: php, aspx, jsp, html, js | HTTP method: GET | Threads: 25 | Wordlist size: 11460
+
+Output File: /home/lemagickonch/reports/http_dev.linkvortex.htb/_25-01-03_06-02-59.txt
+
+Target: http://dev.linkvortex.htb/
+
+[06:02:59] Starting: 
+[06:03:00] 200 -   73B  - /.git/description
+[06:03:00] 200 -   41B  - /.git/HEAD
+[06:03:00] 301 -  239B  - /.git  ->  http://dev.linkvortex.htb/.git/
+[06:03:00] 200 -  557B  - /.git/
+[06:03:00] 200 -  201B  - /.git/config
+[06:03:00] 200 -  620B  - /.git/hooks/
+[06:03:00] 200 -  402B  - /.git/info/
+[06:03:00] 200 -  240B  - /.git/info/exclude
+[06:03:00] 200 -  401B  - /.git/logs/
+[06:03:00] 200 -  175B  - /.git/logs/HEAD
+[06:03:00] 200 -  147B  - /.git/packed-refs
+[06:03:00] 200 -  393B  - /.git/refs/
+[06:03:00] 200 -  418B  - /.git/objects/
+[06:03:00] 301 -  249B  - /.git/refs/tags  ->  http://dev.linkvortex.htb/.git/refs/tags/
+[06:03:00] 200 -  691KB - /.git/index
+[06:03:00] 403 -  199B  - /.ht_wsr.txt
+[06:03:00] 403 -  199B  - /.htaccess.bak1
+[06:03:00] 403 -  199B  - /.htaccess.sample
+[06:03:00] 403 -  199B  - /.htaccess.orig
+[06:03:00] 403 -  199B  - /.htaccess_sc
+[06:03:00] 403 -  199B  - /.htaccessBAK
+[06:03:00] 403 -  199B  - /.htaccess.save
+[06:03:00] 403 -  199B  - /.htaccessOLD2
+[06:03:00] 403 -  199B  - /.html
+[06:03:00] 403 -  199B  - /.htm
+[06:03:00] 403 -  199B  - /.htaccessOLD
+[06:03:00] 403 -  199B  - /.htpasswds
+[06:03:00] 403 -  199B  - /.htpasswd_test
+[06:03:00] 403 -  199B  - /.httr-oauth
+[06:03:00] 403 -  199B  - /.htaccess_orig
+[06:03:00] 403 -  199B  - /.htaccess_extra
+[06:03:09] 403 -  199B  - /cgi-bin/
+[06:03:23] 403 -  199B  - /server-status/
+[06:03:23] 403 -  199B  - /server-status
+
+Task Completed
+```
